@@ -1,0 +1,30 @@
+iframe{
+    width: 100%;
+    height:70vh;
+}
+
+#select_df{
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.info_text{
+    border-style: groove;
+    border-color: rgba(156, 156, 156, 0.575);
+    border-radius: 1px;
+    border-width: 1px;
+    text-align: center;
+    box-shadow: 2px 1px rgb(114, 114, 114);
+}
+
+i:hover {
+    cursor: pointer;;
+}
+
+.over-limit{
+    color: green;
+}
+
+.under-limit{
+    color: red;
+}

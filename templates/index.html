@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CPM, Algorith, Crash, Pert, Project palnning, Online, Calculator">
+    <!-- Bootstrap CSS -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <!-- AOS-->
+    <!-- Icons-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!--Mystyle-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" > 
+    <title>Technical Analysis</title>
+    <!--Fav-icon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <!--fav-->
+      <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!--PLOTLY-->
+  <!--script src="https://cdn.plot.ly/plotly-latest.min.js"></script-->
+
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <a class="navbar-brand"  href="https://fitilis-mixanourgeio.gr/Portofolio/"><img src="/static/images/favicon.ico" ></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://fitilis-mixanourgeio.gr/Portofolio/">My Portfolio <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Other Apps
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="http://konstantinos.pythonanywhere.com/">CPM crash algorithm</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Stock's trading policy</a></li>
+          </ul>
+        </li>
+
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/Tribanocci/Moving_Average_for_Technical_Analysis"><i class="fab fa-github"></i></a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="https://www.linkedin.com/in/konstantinos-fytilis-b05a42248"><i class="fab fa-linkedin"></i></a>
+        </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://www.fiverr.com/s/2x006Q"><img style="height: 15px; padding-bottom: 1px;" src="/static/images/fi.ico"></a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+<hr class="mt-0">
+
+<div id="info" class="container info_text mb-3">
+  <h5>Stock's trading policy</h5>
+  <p>This web-app is made for testing the performance of a simple buy/sell policy of stocks. The policy uses the moving average (MA) prediction for deciding whether to buy stocks using a percentage of the capital, or sell all your stock.
+    This process repeats over the course of the whole timeseries of stock. At the end the results of the policy are calculated.
+  </p>
+</div>
+
+<!-- Step 1 Section -->
+<section id="sec_1" class="container-fluid">
+  <div class="row bg-info text-white p-3 mb-3">
+      <h2>Step 1</h2>
+      <div class="col">
+          <p>The first step involves the selection of a timeseries of a stock. The list has some example ready to use data.</p>
+          <!-- Add your interactive elements for Step 1 here (e.g., list boxes) -->
+      </div>
+      <div class="col" id="select_df">
+        <div class="row pt-3">
+          <div class="col-3">
+            <label>Stock csv file:</label>
+          </div>
+          <div class="col-9">
+            <select id="dataSelect" onchange="setDataPlot()" class="form-select" aria-label="Default select example" >
+              <option value="GE.csv" >GE (General Electric)</option>
+              <option value="JNJ.csv">JNJ (Johnson & Johnson)</option>
+              <option value="PFE.csv">PFE (Pfizer)</option>
+              <option value="PG.csv">PG (Procter & Gamble)</option>
+              <option value="MSSH.csv">MSSH</option>
+            </select>
+          </div>
+        </div> 
+      </div>
+    </div>
+    <div class="row">
+      <iframe src="/static/plot_data.html" id="data_plot"></iframe>
+    </div>
+</section>
+
+
+<!-- Step 2 Section -->
+<section id="result_section">
+  <div class="row bg-success text-white p-3 mb-3">
+    <h2>Step 2</h2>
+    <div class="col-3">
+      <p>Select the parameters of the policy</p>
+    </div>
+    <div class="col-9">
+      <form action="/" method="post">
+        <div class="row">
+          <div class="col">
+            <label class="form-label">Initial capital
+              <i class='bx bx-help-circle' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-original-title="<p>Capital in currency that the policy will initiate.</p>"></i>
+            </label>
+            {% if parameters == 0 %}
+              <input type="number" class="form-control" name="cell_kefalaio" placeholder="e.g 200" required>
+            {% elif parameters %}
+            <input type="number" class="form-control" name="cell_kefalaio" value="{{parameters[0]}}" required>
+            {% endif %}
+          </div>
+          <div class="col">
+            <label class="form-label">Percentage of capital to invest
+              <i class='bx bx-help-circle' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-original-title="<p>When the algorithm decides to make a buy move, it will buy stocks equal to a percentage of the given capital</p>"></i>
+            </label>
+            {% if parameters == 0 %}
+              <input type="number" class="form-control" name="cell_B" placeholder="e.g 0.65" min="0" max="1" step="0.01" required>
+            {% elif parameters %}
+              <input type="number" class="form-control" name="cell_B" value="{{parameters[1]}}" min="0" max="1" step="0.01" required>
+            {% endif %}
+          </div>
+          <div class="col">
+            <label class="form-label">Days of waiting
+              <i class='bx bx-help-circle' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-original-title="<p>When the conditions for a buy or sell move are met, the algorithm will not take action immidiatelly. It will make sure that those conditions are stable for a number of days.</p>"></i>
+            </label>
+            {% if parameters == 0 %}
+              <input type="number" class="form-control" name="cell_wait" placeholder="e.g 5" required>
+            {% elif parameters %}
+              <input type="number" class="form-control" name="cell_wait" value="{{parameters[2]}}" required>
+            {% endif %}
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col">
+            <label class="form-label">Moving Average window
+              <i class='bx bx-help-circle' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-original-title="<p>The decision for a buy or sell move is made using data from the Moving Average prediction. The window is the number of days that are averaged.</p>"></i>
+            </label>
+            {% if parameters == 0 %}
+              <input type="number" class="form-control" name="cell_k" placeholder="e.g 10" required>
+            {% elif parameters %}
+              <input type="number" class="form-control" name="cell_k" value="{{parameters[3]}}" required>
+            {% endif %}
+          </div>
+          <div class="col">
+            <label class="form-label">Data number
+              <i class='bx bx-help-circle' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" data-bs-original-title="<p>Number of data points from the dataset. Each dataset has a maximum of 1090 entries. If left blank the whole dataset will be used.</p>"></i>
+            </label>
+            {% if parameters == 0 %}
+              <input type="number" class="form-control" name="cell_N" placeholder="e.g --" >
+            {% elif parameters %}
+              <input type="number" class="form-control" name="cell_N" value="{{parameters[4]}}">
+            {% endif %}
+          </div>
+          <div class="col d-flex justify-content-center mt-3">
+            <button style="border: 1PX SOLID WHITE;" class="btn btn-primary" type="submit">Run policy</button>
+          </div>
+        </div>
+        <input type="hidden" name="form_selected" id="form_selected_id" value="update_results">
+        <input type="hidden" name="data_selected" id="data_selected_form" value="{{ fig_data }}">
+      </form>
+    </div>
+  </div>
+
+  {% if result == 0 %}
+    <div class="container info_text mb-3">
+      <div class="row">
+        <div class="col">
+          <p>Waiting for input parameters...</p>
+        </div>
+      </div>
+    </div>
+  {%else%}
+  <div class="row" id="result_plots">
+    <div class="col">
+      <iframe src="/static/plot_input.html" id="input_plot"></iframe>
+    </div>
+    <div class="col">
+      <iframe src="/static/plot_results.html" id="results_plot"></iframe>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <table class="table table-hover text-center align-middle">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Policy with MA = "{{parameters[3]}}"</th>
+            <th scope="col">Policy with MA = "{{2*parameters[3]}}"</th>
+            <th scope="col">Policy with MA = "{{3*parameters[3]}}"</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Capital at the end of the investment period</th>
+            {% for item in table_results %}
+              {% if item > parameters[0] %}
+                <td class="over-limit">{{ "$%.2f"|format(item) }}</td>
+              {% else %}
+                <td class="under-limit">{{ "$%.2f"|format(item) }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+   
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  {%endif%}
+</section>
+
+
+<!-- Step 3 Section -->
+<div class="row bg-warning text-dark p-3 mb-3">
+  <div class="col">
+    <h2>Step 3</h2>
+    <p><b>Review</b> the results, and try <b>tuning the parameters</b> of the policy for optimizing the profit. Also, try the policy with a different stock timeseries (different trends).</p>
+  </div>
+</div>
+
+
+
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center p-3">
+  <p>© 2023 Konstantinos Fytilis | All Rights Reserved</p>
+</footer>
+
+<!-- Add your interactive script or include necessary libraries for graphs here -->
+
+    <!--tooltip-->
+    <script type="text/javascript">
+      $(function () {
+          $('[data-bs-toggle="tooltip"]').tooltip({
+              sanitize: false
+          });
+      });
+    </script>
+    <!-- Include your custom JavaScript -->
+    <script>
+
+
+      //for AUTOscrolling to results
+      var to_scroll = "{{ result }}";
+      console.log("Jinja Variable:", to_scroll);
+      document.addEventListener("DOMContentLoaded", function() {
+            if (to_scroll !== '0') {
+                var element = document.getElementById('result_plots');
+
+                if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+        });
+      // Function to handle DATA plot selection --I make an AJAX to call a function in app.py
+      function setDataPlot() {
+          // Get the selected value
+          var selectedValue = $("#dataSelect").val();
+          console.log('inputvform:', $("#data_selected_form").val())
+          // Make an AJAX request to the Flask server
+          $.ajax({
+              type: "POST",
+              url: "/",  // Update with your Flask route
+              data: { selected_value: selectedValue, form_selected: "update_data" },
+              success: function(response) {
+                // $("#data_plot").contentWindow.location.reload();
+                console.log(document.getElementById('dataSelect').value);
+                 document.getElementById('data_plot').contentWindow.location.reload();
+                 document.getElementById('data_selected_form').value = document.getElementById('dataSelect').value
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+          });
+      }
+
+
+            //SELECT the correct option tag
+      console.log('default', $("#data_selected_form").val())
+      $("dataSelect").val($("#data_selected_form").val())
+      document.addEventListener("DOMContentLoaded", function() { 
+        document.getElementById('dataSelect').value =  document.getElementById('data_selected_form').value 
+      });
+  </script>
+
+
+</body>
+</html>
